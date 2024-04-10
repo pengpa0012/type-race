@@ -11,16 +11,28 @@ sample.split("").forEach(el => {
 const letters = document.querySelectorAll(".letter")
 const joinBtn = document.querySelector(".join-btn")
 const createBtn = document.querySelector(".create-btn")
+const roomInput = document.querySelector(".room-input")
 const socket = new WebSocket('ws://localhost:3000')
 let cursor = 0
+let roomID
 
 window.addEventListener("keydown", e => {
   if(e.key == letters[cursor].textContent) {
     letters[cursor].classList.add("text-white", "bg-green-500")
     cursor++
   }
-  sendData(cursor)
+  // sendData(`Room-${roomID}-${cursor}`)
 })
+
+joinBtn.addEventListener("click", () => enterRoom(true))
+createBtn.addEventListener("click", () => enterRoom(false))
+
+function enterRoom(join) {
+  if(!roomInput.value) return
+  sendData(JSON.stringify(`${join ? "Join" : "Create"}-${roomInput.value}`))
+  console.log(roomInput.value)
+  roomInput.value = ""
+}
 
 socket.addEventListener('open', (event) => {
   console.log('Connected to the server', event)

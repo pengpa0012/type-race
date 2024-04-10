@@ -11,15 +11,18 @@
 <body>
   <div class="max-w-7xl mx-auto p-4">
     <h1 class="text-center mt-4 mb-12 text-4xl font-light">Type Race</h1>
-    <div class="start-menu flex flex-col gap-2 my-4 max-w-[400px] mx-auto hidden">
-      <input type="text" placeholder="Room ID" class="border rounded-md p-2 focus:outline-none">
+    <div class="start-menu flex flex-col gap-2 my-4 max-w-[400px] mx-auto">
+      <input type="text" placeholder="Room ID" class="border rounded-md p-2 focus:outline-none room-input">
       <div class="flex gap-2">
-        <button class="bg-green-500 rounded-md py-1 px-3 w-full text-white text-lg">Join</button>
-        <button class="rounded-md py-1 px-3 w-full text-lg">Create</button>
+        <button class="bg-green-500 rounded-md py-1 px-3 w-full text-white text-lg join-btn">Join</button>
+        <button class="rounded-md py-1 px-3 w-full text-lg create-btn">Create</button>
       </div>
     </div>
-    <div class="border rounded-md p-5">
-      <p class="text text-xl text-center"></p>
+    <div class="">
+      <h2 class="text-md room-id">Room ID: 123</h2>
+      <div class="border rounded-md p-5">
+        <p class="text text-xl text-center"></p>
+      </div>
     </div>
   </div>
 </body>
