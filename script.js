@@ -8,6 +8,9 @@ generateLetters(sample, true, enemyText)
 const letters = document.querySelectorAll(".letter")
 const enemyLetters = document.querySelectorAll(".enemy-letter")
 const joinBtn = document.querySelector(".join-btn")
+const gameUI = document.querySelector(".game-ui")
+const startMenu = document.querySelector(".start-menu")
+const loader = document.querySelector(".loader")
 const createBtn = document.querySelector(".create-btn")
 const roomInput = document.querySelector(".room-input")
 const roomIDText = document.querySelector(".room-id")
@@ -31,6 +34,7 @@ function enterRoom(join) {
   if(!roomInput.value && !gameStart) return
   sendData(JSON.stringify(`${join ? "Join" : "Create"}-${roomInput.value}`))
   roomInput.value = ""
+  loader.classList.remove("hidden")
 }
 
 socket.addEventListener('open', (event) => {
@@ -43,8 +47,12 @@ socket.addEventListener('message', (event) => {
     roomIDText.textContent = `Room ID: ${roomID}`
   } else if(event.data.includes("Game Start!")) {
     gameStart = true
+    loader.classList.add("hidden")
+    startMenu.classList.add("hidden")
+    gameUI.classList.remove("hidden")
   } else if(event.data.includes("Room Full!") || event.data.includes("Room does not exist!")) {
     alert(event.data)
+    loader.classList.add("hidden")
   } else {
     // other client current cursor
     enemyLetters[event.data - 1].classList.add("text-white", "bg-green-500")
@@ -61,10 +69,10 @@ function sendData(data) {
 
 function generateLetters(arr, enemy, parent) {
   arr.split("").forEach(el => {
-    const span = document.createElement("span")
-    span.textContent = el
-    span.classList = `${enemy ? "enemy-letter" : "letter"} border border-transparent`
-    parent.appendChild(span)
+    const letter = document.createElement("letter")
+    letter.textContent = el
+    letter.classList = `${enemy ? "enemy-letter" : "letter"} border border-transparent`
+    parent.appendChild(letter)
   })
 }
 
