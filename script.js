@@ -1,14 +1,12 @@
 const text = document.querySelector(".text")
+const enemyText = document.querySelector(".enemy-text")
 const sample = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor quasi provident a perferendis unde quidem, qui odit omnis est officiis illo, corrupti at blanditiis iusto voluptatibus, nesciunt temporibus? Perspiciatis ratione officiis voluptatem adipisci consequatur esse temporibus obcaecati necessitatibus labore accusantium."
 
-sample.split("").forEach(el => {
-  const span = document.createElement("span")
-  span.textContent = el
-  span.classList = "letter border border-transparent"
-  text.appendChild(span)
-})
+generateLetters(sample, false, text)
+generateLetters(sample, true, enemyText)
 
 const letters = document.querySelectorAll(".letter")
+const enemyLetters = document.querySelectorAll(".enemy-letter")
 const joinBtn = document.querySelector(".join-btn")
 const createBtn = document.querySelector(".create-btn")
 const roomInput = document.querySelector(".room-input")
@@ -18,11 +16,12 @@ let cursor = 0
 let roomID
 
 window.addEventListener("keydown", e => {
+  if(!roomID) return
   if(e.key == letters[cursor].textContent) {
     letters[cursor].classList.add("text-white", "bg-green-500")
     cursor++
   }
-  // sendData(`Room-${roomID}-${cursor}`)
+  sendData(JSON.stringify(`Room-${roomID}-${cursor}`))
 })
 
 joinBtn.addEventListener("click", () => enterRoom(true))
@@ -42,6 +41,9 @@ socket.addEventListener('message', (event) => {
   if(event.data.includes("Joined") || event.data.includes("Created")) {
     roomID = event.data.split("-")[1]
     roomIDText.textContent = `Room ID: ${roomID}`
+  } else {
+    // other client current cursor
+    enemyLetters[event.data - 1].classList.add("text-white", "bg-green-500")
   }
 })
 
@@ -53,6 +55,14 @@ function sendData(data) {
   }
 }
 
+function generateLetters(arr, enemy, parent) {
+  arr.split("").forEach(el => {
+    const span = document.createElement("span")
+    span.textContent = el
+    span.classList = `${enemy ? "enemy-letter" : "letter"} border border-transparent`
+    parent.appendChild(span)
+  })
+}
 
 // Game UI
 //  -User and enemy screen

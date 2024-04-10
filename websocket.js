@@ -44,12 +44,8 @@ wss.on('connection', (ws) => {
       const roomID = splitMessage[1]
       const cursor = splitMessage[2]
 
-      players.forEach(el => {
-        if(el.roomID == roomID) {
-          el.user.send(cursor)
-        }
-      })
-
+      const findPlayer = players.find(el => el.user !== ws && el.roomID == roomID)
+      findPlayer.user.send(cursor)
     }
   })
 
