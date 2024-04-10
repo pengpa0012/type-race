@@ -23,6 +23,13 @@ wss.on('connection', (ws) => {
       } else {
         players.push({user: ws, roomID})
         ws.send(`Room-${roomID}-Joined!`)
+        if(players.filter(el => el.roomID == roomID).length == 2) {
+          players.forEach(el => {
+              if(el.roomID == roomID) {
+                el.user.send("Game Start!")
+              }
+          })
+        }
       }
     }
 

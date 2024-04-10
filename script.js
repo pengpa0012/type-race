@@ -13,7 +13,7 @@ const roomInput = document.querySelector(".room-input")
 const roomIDText = document.querySelector(".room-id")
 const socket = new WebSocket('ws://localhost:3000')
 let cursor = 0
-let roomID
+let roomID, gameStart
 
 window.addEventListener("keydown", e => {
   if(!roomID) return
@@ -28,7 +28,7 @@ joinBtn.addEventListener("click", () => enterRoom(true))
 createBtn.addEventListener("click", () => enterRoom(false))
 
 function enterRoom(join) {
-  if(!roomInput.value) return
+  if(!roomInput.value && !gameStart) return
   sendData(JSON.stringify(`${join ? "Join" : "Create"}-${roomInput.value}`))
   roomInput.value = ""
 }
@@ -41,6 +41,10 @@ socket.addEventListener('message', (event) => {
   if(event.data.includes("Joined") || event.data.includes("Created")) {
     roomID = event.data.split("-")[1]
     roomIDText.textContent = `Room ID: ${roomID}`
+  } else if(event.data.includes("Game Start!")) {
+    gameStart = true
+  } else if(event.data.includes("Room Full!") || event.data.includes("Room does not exist!")) {
+    alert(event.data)
   } else {
     // other client current cursor
     enemyLetters[event.data - 1].classList.add("text-white", "bg-green-500")
@@ -64,11 +68,7 @@ function generateLetters(arr, enemy, parent) {
   })
 }
 
-// Game UI
-//  -User and enemy screen
 // Result modal
 //  -Reset game
 //  -New game
 // Get random paragraphs 
-// Websocket data
-//  -cursor
