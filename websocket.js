@@ -16,13 +16,14 @@ wss.on('connection', (ws) => {
     if(splitMessage[0] == "Join") {
       // if room is more than 2 client reject, else add
       const roomID = splitMessage[1]
-
-      if(players.filter(el => el.roomID == roomID).length == 2) {
+      if(players.find(el => el.roomID == roomID) == undefined) {
+        ws.send("Room does not exist!")
+      } else if(players.filter(el => el.roomID == roomID).length == 2) {
         ws.send("Room Full!")
       } else {
         players.push({user: ws, roomID})
+        ws.send(`Room-${roomID}-Joined!`)
       }
-      
     }
 
     if(splitMessage[0] == "Create") {
@@ -34,14 +35,21 @@ wss.on('connection', (ws) => {
         ws.send("Room Already Created!")
       } else {
         players.push({user: ws, roomID})
+        ws.send(`Room-${roomID}-Created!`)
       }
-      players.push({user: ws, roomID})
     }
 
     // Send cursor data based on room id
     if(splitMessage[0] == "Room") {
       const roomID = splitMessage[1]
       const cursor = splitMessage[2]
+
+      players.forEach(el => {
+        if(el.roomID == roomID) {
+          el.user.send(cursor)
+        }
+      })
+
     }
   })
 

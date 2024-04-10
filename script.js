@@ -12,6 +12,7 @@ const letters = document.querySelectorAll(".letter")
 const joinBtn = document.querySelector(".join-btn")
 const createBtn = document.querySelector(".create-btn")
 const roomInput = document.querySelector(".room-input")
+const roomIDText = document.querySelector(".room-id")
 const socket = new WebSocket('ws://localhost:3000')
 let cursor = 0
 let roomID
@@ -30,7 +31,6 @@ createBtn.addEventListener("click", () => enterRoom(false))
 function enterRoom(join) {
   if(!roomInput.value) return
   sendData(JSON.stringify(`${join ? "Join" : "Create"}-${roomInput.value}`))
-  console.log(roomInput.value)
   roomInput.value = ""
 }
 
@@ -39,7 +39,10 @@ socket.addEventListener('open', (event) => {
 })
 
 socket.addEventListener('message', (event) => {
-  console.log(event.data)
+  if(event.data.includes("Joined") || event.data.includes("Created")) {
+    roomID = event.data.split("-")[1]
+    roomIDText.textContent = `Room ID: ${roomID}`
+  }
 })
 
 function sendData(data) {
