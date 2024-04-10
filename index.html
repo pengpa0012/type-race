@@ -6,12 +6,20 @@
   <title>Type Race</title>
   <script src="./script.js" defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
   <div class="max-w-7xl mx-auto p-4">
-    <h1 class="text-center my-4 text-4xl font-bold">Type Race</h1>
+    <h1 class="text-center mt-4 mb-12 text-4xl font-light">Type Race</h1>
+    <div class="start-menu flex flex-col gap-2 my-4 max-w-[400px] mx-auto hidden">
+      <input type="text" placeholder="Room ID" class="border rounded-md p-2 focus:outline-none">
+      <div class="flex gap-2">
+        <button class="bg-green-500 rounded-md py-1 px-3 w-full text-white text-lg">Join</button>
+        <button class="rounded-md py-1 px-3 w-full text-lg">Create</button>
+      </div>
+    </div>
     <div class="border rounded-md p-5">
-      <p class="text text-2xl text-center"></p>
+      <p class="text text-xl text-center"></p>
     </div>
   </div>
 </body>

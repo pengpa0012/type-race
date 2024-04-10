@@ -19,6 +19,8 @@ window.addEventListener("keydown", e => {
   }
 })
 
+
+
 // Menu UI
 //  -Room input
 // Game UI
@@ -27,3 +29,5 @@ window.addEventListener("keydown", e => {
 //  -Reset game
 //  -New game
 // Get random paragraphs 
+// Websocket data
+//  -cursor
