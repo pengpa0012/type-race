@@ -24,7 +24,14 @@ window.addEventListener("keydown", e => {
     letters[cursor].classList.add("text-white", "bg-green-500")
     cursor++
   }
+
   sendData(JSON.stringify(`Room-${roomID}-${cursor}`))
+
+  if(cursor == letters.length) {
+    alert("You win!")
+    sendData(JSON.stringify(`Winner-${roomID}`))
+    gameStart = false
+  }
 })
 
 joinBtn.addEventListener("click", () => enterRoom(true))
@@ -50,7 +57,7 @@ socket.addEventListener('message', (event) => {
     loader.classList.add("hidden")
     startMenu.classList.add("hidden")
     gameUI.classList.remove("hidden")
-  } else if(event.data.includes("Room Full!") || event.data.includes("Room does not exist!")) {
+  } else if(event.data.includes("Room Full!") || event.data.includes("Room does not exist!") || event.data.includes("Other player win!")) {
     alert(event.data)
     loader.classList.add("hidden")
   } else {
@@ -77,6 +84,6 @@ function generateLetters(arr, enemy, parent) {
 }
 
 // Result modal
-//  -Reset game
-//  -New game
+//  -after result, go back to start menu
 // Get random paragraphs 
+// add difficulty (pure letters, w/ numbers, w/ symbols)
