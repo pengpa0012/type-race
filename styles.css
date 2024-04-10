@@ -9,3 +9,7 @@
 body {
   font-family: "Poppins", sans-serif;
 }
+
+.current-cursor {
+  border-bottom: solid 2px #000 !important;
+}

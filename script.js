@@ -18,10 +18,16 @@ const socket = new WebSocket('ws://localhost:3000')
 let cursor = 0
 let roomID, gameStart
 
+
+// add cursor to first letter
+letters[0].classList.add("current-cursor")
+
 window.addEventListener("keydown", e => {
   if(!roomID) return
   if(e.key == letters[cursor].textContent) {
+    letters.forEach(el => el.classList.remove("current-cursor"))
     letters[cursor].classList.add("text-white", "bg-green-500")
+    if(cursor + 1 != letters.length) letters[cursor+1].classList.add("current-cursor")
     cursor++
   }
 
@@ -31,6 +37,8 @@ window.addEventListener("keydown", e => {
     alert("You win!")
     sendData(JSON.stringify(`Winner-${roomID}`))
     gameStart = false
+    startMenu.classList.remove("hidden")
+    gameUI.classList.add("hidden")
   }
 })
 
@@ -60,6 +68,8 @@ socket.addEventListener('message', (event) => {
   } else if(event.data.includes("Room Full!") || event.data.includes("Room does not exist!") || event.data.includes("Other player win!")) {
     alert(event.data)
     loader.classList.add("hidden")
+    startMenu.classList.remove("hidden")
+    gameUI.classList.add("hidden")
   } else {
     // other client current cursor
     enemyLetters[event.data - 1].classList.add("text-white", "bg-green-500")
@@ -83,7 +93,5 @@ function generateLetters(arr, enemy, parent) {
   })
 }
 
-// Result modal
-//  -after result, go back to start menu
 // Get random paragraphs 
 // add difficulty (pure letters, w/ numbers, w/ symbols)

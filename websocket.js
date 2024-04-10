@@ -52,7 +52,7 @@ wss.on('connection', (ws) => {
       const cursor = splitMessage[2]
 
       const findPlayer = players.find(el => el.user !== ws && el.roomID == roomID)
-      findPlayer.user.send(cursor)
+      findPlayer?.user?.send(cursor)
     }
 
     // Send other player win alert
@@ -61,6 +61,7 @@ wss.on('connection', (ws) => {
 
       const findPlayer = players.find(el => el.user != ws && el.roomID == roomID)
       findPlayer.user.send("Other player win!")
+      players = players.filter(el => el.roomID !== roomID)
     }
   })
 
