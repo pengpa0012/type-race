@@ -2,6 +2,7 @@ const text = document.querySelector(".text")
 const enemyText = document.querySelector(".enemy-text")
 const sample = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor quasi provident a perferendis unde quidem, qui odit omnis est officiis illo, corrupti at blanditiis iusto voluptatibus, nesciunt temporibus? Perspiciatis ratione officiis voluptatem adipisci consequatur esse temporibus obcaecati necessitatibus labore accusantium."
 
+// generate text for 2 client
 generateLetters(sample, false, text)
 generateLetters(sample, true, enemyText)
 
@@ -15,20 +16,21 @@ const createBtn = document.querySelector(".create-btn")
 const roomInput = document.querySelector(".room-input")
 const roomIDText = document.querySelector(".room-id")
 const socket = new WebSocket('ws://localhost:3000')
+const wrongSFX = new Audio("./assets/wrong-sfx.mp3")
 let cursor = 0
 let roomID, gameStart
 
 
-// add cursor to first letter
-letters[0].classList.add("current-cursor")
 
 window.addEventListener("keydown", e => {
-  if(!roomID) return
+  if(!roomID || e.key == "Shift") return
   if(e.key == letters[cursor].textContent) {
     letters.forEach(el => el.classList.remove("current-cursor"))
     letters[cursor].classList.add("text-white", "bg-green-500")
     if(cursor + 1 != letters.length) letters[cursor+1].classList.add("current-cursor")
     cursor++
+  } else {
+    wrongSFX.play()
   }
 
   sendData(JSON.stringify(`Room-${roomID}-${cursor}`))
@@ -85,13 +87,14 @@ function sendData(data) {
 }
 
 function generateLetters(arr, enemy, parent) {
-  arr.split("").forEach(el => {
+  arr.split("").forEach((el, i) => {
     const letter = document.createElement("letter")
     letter.textContent = el
-    letter.classList = `${enemy ? "enemy-letter" : "letter"} border border-transparent`
+    letter.classList = `${enemy ? "enemy-letter" : "letter"} ${(i == 0 && !enemy) && "current-cursor"} border border-transparent`
     parent.appendChild(letter)
   })
 }
 
-// Get random paragraphs 
-// add difficulty (pure letters, w/ numbers, w/ symbols)
+// Get random paragraphs (API)
+// Update style
+// Animations
